@@ -34,11 +34,36 @@ The server will be available at `http://127.0.0.1:9999`.
 ## Usage
 
 1. Create a `data` folder and add files (e.g., `cat`, `dog`, etc.).
-2. Run the server, then visit the following URLs:
+2. By default, the port is `9999`, but can be specified with the execution, for exemple:
+    ```bash
+    rustrandserve 1234
+    ```
+3. Run the server, then visit the following URLs:
 
-    - `http://127.0.0.1:9999/cat` – Returns the content of the `cat` file.
-    - `http://127.0.0.1:9999/randomfile` – Returns a random string.
-    - `http://127.0.0.1:9999/` – Returns a random string.
+    - `http://127.0.0.1:1234/cat` – Returns the content of the `cat` file.
+    - `http://127.0.0.1:1234/randomfile` – Returns a random string.
+    - `http://127.0.0.1:1234/` – Returns a random string.
+
+## Docker
+
+The `Dockerfile` is in the repo | [Dockerfile](Dockerfile)
+To build:
+```bash
+docker build -t rustrandserve .
+```
+
+Here the `docker-compose.yml`:
+```yml
+services:
+    nginx:
+        image: rustrandserve
+        container_name: rustrandserve
+        volumes:
+            - ./data:/app/data:ro
+        ports:
+            - "9999:9999"
+        restart: unless-stopped
+```
 
 ## Obfuscation with Gobuster
 
