@@ -29,12 +29,12 @@
     cargo run
     ```
 
-The server will be available at `http://127.0.0.1:9999`.
+The server will be available at `http://127.0.0.1:8989`.
 
 ## Usage
 
 1. Create a `data` folder and add files (e.g., `cat`, `dog`, etc.).
-2. By default, the port is `9999`, but can be specified with the execution, for exemple:
+2. By default, the port is `8989`, but can be specified with the execution, for exemple:
     ```bash
     rustrandserve 1234
     ```
@@ -61,7 +61,7 @@ services:
         volumes:
             - ./data:/app/data:ro
         ports:
-            - "9999:9999"
+            - "8989:8989"
         restart: unless-stopped
 ```
 
@@ -70,4 +70,4 @@ services:
 To make file discovery harder, use a web scanner like [Gobuster](https://github.com/OJ/gobuster):
 
 ```bash
-gobuster dir -u http://127.0.0.1:9999 -w /path/to/wordlist.txt
+gobuster dir -u http://127.0.0.1:8989 -w /path/to/wordlist.txt

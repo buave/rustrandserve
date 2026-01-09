@@ -1,14 +1,14 @@
 use axum::{
-    routing::get, 
-    Router, 
-    response::{IntoResponse, Response}, 
     extract::Path,
-    http::{StatusCode, header::CONTENT_TYPE},
+    http::{header::CONTENT_TYPE, StatusCode},
+    response::{IntoResponse, Response},
+    routing::get,
+    Router,
 };
-use rand::{distributions::Alphanumeric, Rng};
-use tokio::fs;
-use std::{env, path::PathBuf};
 use mime_guess;
+use rand::{distributions::Alphanumeric, Rng};
+use std::{env, path::PathBuf};
+use tokio::fs;
 
 async fn handle_request(Path(filename): Path<String>) -> impl IntoResponse {
     let file_path = PathBuf::from(format!("data/{}", filename));
@@ -51,10 +51,9 @@ fn generate_random_string() -> String {
 
 #[tokio::main]
 async fn main() {
-
     let args: Vec<String> = env::args().collect();
 
-    let mut port = "9999";
+    let mut port = "8989";
 
     if args.len() > 1 {
         port = &args[1];
@@ -64,6 +63,8 @@ async fn main() {
         .route("/", get(index))
         .route("/{*path}", get(handle_request));
 
-    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port)).await.unwrap();
+    let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port))
+        .await
+        .unwrap();
     axum::serve(listener, app).await.unwrap();
 }
