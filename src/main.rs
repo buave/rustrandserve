@@ -1,11 +1,10 @@
 use axum::{
     extract::Path,
-    http::{header::CONTENT_TYPE, StatusCode},
+    http::StatusCode,
     response::{IntoResponse, Response},
     routing::get,
     Router,
 };
-use mime_guess;
 use rand::{distributions::Alphanumeric, Rng};
 use std::{env, path::PathBuf};
 use tokio::fs;
@@ -15,22 +14,18 @@ async fn handle_request(Path(filename): Path<String>) -> impl IntoResponse {
 
     if file_path.exists() {
         match fs::read(&file_path).await {
-            Ok(content) => {
-                let mime_type = mime_guess::from_path(&file_path).first_or_octet_stream();
-                Response::builder()
-                    .status(StatusCode::OK)
-                    .header(CONTENT_TYPE, mime_type.as_ref())
-                    .body(axum::body::Body::from(content))
-                    .unwrap()
-            }
+            Ok(content) => Response::builder()
+                .status(StatusCode::OK)
+                .body(axum::body::Body::from(content))
+                .unwrap(),
             Err(_) => Response::builder()
-                .status(StatusCode::INTERNAL_SERVER_ERROR)
+                .status(StatusCode::OK)
                 .body(axum::body::Body::from("Error reading file"))
                 .unwrap(),
         }
     } else {
         Response::builder()
-            .status(StatusCode::NOT_FOUND)
+            .status(StatusCode::OK)
             .body(axum::body::Body::from(generate_random_string()))
             .unwrap()
     }
